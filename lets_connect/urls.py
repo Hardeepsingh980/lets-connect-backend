@@ -28,7 +28,7 @@ from schedule.views import (
 )
 from public.views import (
     OpenScheduleViewSet,
-    MeetingApiView
+    MeetingApiView,NotifyApiView
     
 )
 
@@ -48,6 +48,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
     path('public/schedule/', MeetingApiView.as_view(), name='meeting'),
+    path('public/notify/', NotifyApiView.as_view(), name='notify'),
+
 
     # social auth
     path('dj-rest-auth/google/', GoogleLoginView.as_view(), name='google_login')

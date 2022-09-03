@@ -34,6 +34,7 @@ from schedule.serializers import (
 
 from .serializer import (
     MeetingSerializer,
+    NotifySerializer,
 )
 
 
@@ -63,4 +64,8 @@ class OpenScheduleViewSet(RetrieveModelMixin, GenericViewSet):
 
 class MeetingApiView(CreateAPIView):
     serializer_class = MeetingSerializer
+    permission_classes = [AllowAny]
+
+class NotifyApiView(CreateAPIView):
+    serializer_class = NotifySerializer
     permission_classes = [AllowAny]
