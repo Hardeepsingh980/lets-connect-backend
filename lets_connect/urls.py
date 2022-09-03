@@ -26,12 +26,20 @@ from schedule.views import (
     ScheduleViewSet,
     SlotsViewSet
 )
+from public.views import (
+    OpenScheduleViewSet,
+    MeetingApiView,NotifyApiView
+    
+)
+
 
 router = DefaultRouter()
 
 # schedule
 router.register(r'schedules', ScheduleViewSet, basename='schedule')
 router.register(r'slots', SlotsViewSet, basename='slots')
+router.register(r'public/schedules', OpenScheduleViewSet, basename='open_slots')
+
 
 # users
 router.register(r'users', UsersViewSet, basename='user')
@@ -39,6 +47,9 @@ router.register(r'users', UsersViewSet, basename='user')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
+    path('public/schedule/', MeetingApiView.as_view(), name='meeting'),
+    path('public/notify/', NotifyApiView.as_view(), name='notify'),
+
 
     # social auth
     path('dj-rest-auth/google/', GoogleLoginView.as_view(), name='google_login')

@@ -8,9 +8,12 @@ from rest_framework.serializers import (
 )
 # models imports
 from .models import Schedule, Slots
+from public.models import Meeting
 
+from public.serializer import MeetingSerializer
 
 class SlotSerializer(ModelSerializer):
+    meetings = MeetingSerializer(many=True)
     class Meta:
         model = Slots
         fields = (
@@ -19,7 +22,8 @@ class SlotSerializer(ModelSerializer):
             'to_time',
             'max_people',
             'description',
-            'is_available'
+            'is_available',
+            'meetings'
         )
 
 
