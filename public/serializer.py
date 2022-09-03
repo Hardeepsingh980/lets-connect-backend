@@ -19,12 +19,14 @@ class MeetingSerializer(ModelSerializer):
         super().validate(attrs)
         slot = attrs.get('slot')
         meetings = slot.meetings.all()
-        print('=============================')
-        print(slot)
-        print(slot.max_people)
-        print(meetings.count())
         if meetings.count() >= slot.max_people:
             slot.is_available = False
             slot.save()
             raise ValidationError('No more participants can join.')
         return attrs
+    
+    def update_slot_available_status(self, slot):
+        meetings = slot.meetings.all()
+        if meetings.count() >= slot.max_people:
+            slot.is_available = False
+            slot.save()
