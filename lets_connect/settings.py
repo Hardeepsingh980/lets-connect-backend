@@ -54,7 +54,8 @@ INSTALLED_APPS = [
 
     # myapps
     'users',
-    'schedule'
+    'schedule',
+    'public',
 ]
 
 SITE_ID = 1

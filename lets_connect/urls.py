@@ -28,6 +28,8 @@ from schedule.views import (
 )
 from public.views import (
     OpenScheduleViewSet,
+    MeetingApiView
+    
 )
 
 
@@ -45,6 +47,7 @@ router.register(r'users', UsersViewSet, basename='user')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
+    path('public/schedule/', MeetingApiView.as_view(), name='meeting'),
 
     # social auth
     path('dj-rest-auth/google/', GoogleLoginView.as_view(), name='google_login')
