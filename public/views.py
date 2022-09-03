@@ -64,3 +64,7 @@ class OpenScheduleViewSet(RetrieveModelMixin, GenericViewSet):
 class MeetingApiView(CreateAPIView):
     serializer_class = MeetingSerializer
     permission_classes = [AllowAny]
+
+    def perform_create(self, serializer):
+        meeting = serializer.save()
+        serializer.update_slot_available_status(meeting.slot)
