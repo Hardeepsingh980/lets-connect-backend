@@ -26,12 +26,18 @@ from schedule.views import (
     ScheduleViewSet,
     SlotsViewSet
 )
+from public.views import (
+    OpenScheduleViewSet,
+)
+
 
 router = DefaultRouter()
 
 # schedule
 router.register(r'schedules', ScheduleViewSet, basename='schedule')
 router.register(r'slots', SlotsViewSet, basename='slots')
+router.register(r'public/schedules', OpenScheduleViewSet, basename='open_slots')
+
 
 # users
 router.register(r'users', UsersViewSet, basename='user')
