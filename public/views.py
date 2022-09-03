@@ -6,6 +6,15 @@ from rest_framework.viewsets import (
 from rest_framework.mixins import (
     RetrieveModelMixin
 )
+
+from rest_framework.generics import (
+    CreateAPIView,
+)
+
+from rest_framework.permissions import (
+ AllowAny,
+)
+
 from rest_framework.response import Response
 
 
@@ -20,8 +29,14 @@ from schedule.models import (
 # serializers imports
 from schedule.serializers import (
     ScheduleSerializer,
-
 )
+
+
+from .serializer import (
+    MeetingSerializer,
+)
+
+
 
 
 class OpenScheduleViewSet(RetrieveModelMixin, GenericViewSet):
@@ -31,6 +46,7 @@ class OpenScheduleViewSet(RetrieveModelMixin, GenericViewSet):
         'date': ['lte', 'gte']
     }
     lookup_field = 'profile_url'
+    permission_classes = [AllowAny]
 
     def retrieve(self, request, *args, **kwargs):
         profile_url = kwargs.get('profile_url')
@@ -44,3 +60,15 @@ class OpenScheduleViewSet(RetrieveModelMixin, GenericViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
+
+class MeetingApiView(CreateAPIView):
+    serializer_class = MeetingSerializer
+
+    # def perform_create(self, serializer):
+    #     serializer.save(user=self.request.user)
+
+    # def get_queryset(self):
+    #     return Meeting.objects.filter(user=self.request.user)
+
+    # def get_serializer_context(self):
+    #     return {'request': self.request}
