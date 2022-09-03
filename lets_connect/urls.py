@@ -16,6 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from users.views import GoogleLoginView
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    # social auth
+    path('dj-rest-auth/google/', GoogleLoginView.as_view(), name='google_login')
 ]
