@@ -14,12 +14,31 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 
-from users.views import GoogleLoginView
+# views
+from users.views import (
+    GoogleLoginView,
+    UsersViewSet
+)
+from schedule.views import (
+    ScheduleViewSet,
+    SlotsViewSet
+)
+
+router = DefaultRouter()
+
+# schedule
+router.register(r'schedules', ScheduleViewSet, basename='schedule')
+router.register(r'slots', SlotsViewSet, basename='slots')
+
+# users
+router.register(r'users', UsersViewSet, basename='user')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/', include(router.urls)),
 
     # social auth
     path('dj-rest-auth/google/', GoogleLoginView.as_view(), name='google_login')
