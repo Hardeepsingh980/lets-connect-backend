@@ -34,6 +34,7 @@ from schedule.serializers import (
 
 from .serializer import (
     MeetingSerializer,
+    NotifySerializer,
 )
 
 
@@ -65,6 +66,11 @@ class MeetingApiView(CreateAPIView):
     serializer_class = MeetingSerializer
     permission_classes = [AllowAny]
 
+
     def perform_create(self, serializer):
         meeting = serializer.save()
         serializer.update_slot_available_status(meeting.slot)
+        
+class NotifyApiView(CreateAPIView):
+    serializer_class = NotifySerializer
+    permission_classes = [AllowAny]
