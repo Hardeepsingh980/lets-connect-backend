@@ -18,14 +18,23 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
 # views
-from users.views import GoogleLoginView
+from users.views import (
+    GoogleLoginView,
+    UsersViewSet
+)
 from schedule.views import (
-    ScheduleViewSet
+    ScheduleViewSet,
+    SlotsViewSet
 )
 
 router = DefaultRouter()
 
-router.register(r'schedule', ScheduleViewSet, basename='schedule')
+# schedule
+router.register(r'schedules', ScheduleViewSet, basename='schedule')
+router.register(r'slots', SlotsViewSet, basename='slots')
+
+# users
+router.register(r'users', UsersViewSet, basename='user')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
