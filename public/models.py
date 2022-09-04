@@ -10,7 +10,7 @@ class Meeting(models.Model):
     notes = models.TextField(blank=True, null=True)
     slot = models.ForeignKey(
         Slots, on_delete=models.CASCADE, related_name='meetings')
-    event_id = models.CharField(max_length=20)
+    event_id = models.CharField(max_length=200)
 
 
 class Notify(models.Model):
