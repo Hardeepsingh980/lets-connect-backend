@@ -1,7 +1,8 @@
+from datetime import datetime, timezone
 from django_filters.rest_framework import DjangoFilterBackend
 # rest framework
 from rest_framework.viewsets import (
-    GenericViewSet    
+    GenericViewSet
 )
 from rest_framework.mixins import (
     RetrieveModelMixin
@@ -12,7 +13,7 @@ from rest_framework.generics import (
 )
 
 from rest_framework.permissions import (
- AllowAny,
+    AllowAny,
 )
 
 from rest_framework.response import Response
@@ -30,14 +31,15 @@ from schedule.models import (
 from schedule.serializers import (
     ScheduleSerializer,
 )
-
-
 from .serializer import (
     MeetingSerializer,
     NotifySerializer,
 )
 
-
+# tasks
+from schedule.tasks import (
+    create_event
+)
 
 
 class OpenScheduleViewSet(RetrieveModelMixin, GenericViewSet):
@@ -66,11 +68,21 @@ class MeetingApiView(CreateAPIView):
     serializer_class = MeetingSerializer
     permission_classes = [AllowAny]
 
-
     def perform_create(self, serializer):
         meeting = serializer.save()
         serializer.update_slot_available_status(meeting.slot)
-        
+        slot = meeting.slot
+        schedule = slot.schedule
+        create_event(
+            meeting.notes,
+            datetime.combine(
+                schedule.date, slot.from_time).isoformat() + "+05:30",
+            datetime.combine(
+                schedule.date, slot.to_time).isoformat() + "+05:30",
+            [meeting.email]
+        )
+
+
 class NotifyApiView(CreateAPIView):
     serializer_class = NotifySerializer
     permission_classes = [AllowAny]
