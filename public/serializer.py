@@ -1,6 +1,7 @@
 from rest_framework.serializers import (
     ModelSerializer,
-    ValidationError
+    ValidationError,
+    CharField
 )
 
 
@@ -11,6 +12,7 @@ from .models import (
 
 
 class MeetingSerializer(ModelSerializer):
+    event_id = CharField(read_only=True)
     class Meta:
         model = Meeting
         fields = '__all__'
@@ -19,6 +21,7 @@ class MeetingSerializer(ModelSerializer):
         super().validate(attrs)
         slot = attrs.get('slot')
         meetings = slot.meetings.all()
+
         if meetings.count() >= slot.max_people:
             slot.is_available = False
             slot.save()
