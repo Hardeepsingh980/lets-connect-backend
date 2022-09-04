@@ -13,7 +13,7 @@ from public.models import Meeting
 from public.serializer import MeetingSerializer
 
 class SlotSerializer(ModelSerializer):
-    meetings = MeetingSerializer(many=True)
+    meetings = MeetingSerializer(many=True,read_only=True)
     class Meta:
         model = Slots
         fields = (

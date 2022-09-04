@@ -25,6 +25,7 @@ from users.models import (
 )
 from schedule.models import (
     Schedule,
+    Slots
 )
 
 # serializers imports
@@ -35,10 +36,14 @@ from .serializer import (
     MeetingSerializer,
     NotifySerializer,
 )
+from .models import (
+    Meeting,
+)
 
 # tasks
 from schedule.tasks import (
-    create_event
+    create_event,
+    update_event
 )
 
 
@@ -68,19 +73,32 @@ class MeetingApiView(CreateAPIView):
     serializer_class = MeetingSerializer
     permission_classes = [AllowAny]
 
-    def perform_create(self, serializer):
-        meeting = serializer.save()
+
+    def post(self, request):
+        serializer = MeetingSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        meeting =  Meeting.objects.filter(slot=request.data['slot'])
+        if meeting:
+            event_id = meeting.first().event_id
+            update_event(event_id,request.data['email'])
+            
+        else:
+            slot = Slots.objects.get(id=request.data['slot'])
+            schedule = slot.schedule
+            event_id = create_event(
+                serializer.validated_data['notes'],
+                datetime.combine(
+                    schedule.date, slot.from_time).isoformat() + "+05:30",
+                datetime.combine(
+                    schedule.date, slot.to_time).isoformat() + "+05:30",
+                [serializer.validated_data['email']]
+            )
+        meeting = serializer.save(event_id=event_id)
         serializer.update_slot_available_status(meeting.slot)
-        slot = meeting.slot
-        schedule = slot.schedule
-        create_event(
-            meeting.notes,
-            datetime.combine(
-                schedule.date, slot.from_time).isoformat() + "+05:30",
-            datetime.combine(
-                schedule.date, slot.to_time).isoformat() + "+05:30",
-            [meeting.email]
-        )
+
+        return Response(serializer.data)
+
+
 
 
 class NotifyApiView(CreateAPIView):
