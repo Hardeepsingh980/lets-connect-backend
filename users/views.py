@@ -29,8 +29,7 @@ class UsersViewSet(GenericViewSet):
 
     @action(methods=['get'], detail=False)
     def me(self, request):
-        user = UserProfileSerializer(self.request.user)
-        return Response(user.data)
+        return Response(self.request.user)
 
     @action(methods=['post'], detail=False)
     def set_profile_url(self, request):

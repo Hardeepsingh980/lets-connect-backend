@@ -39,9 +39,9 @@ class ScheduleViewSet(ListModelMixin, GenericViewSet):
     @action(methods=['post'], detail=False, serializer_class=ScheduleAddSerializer)
     def add(self, request):
         serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        serializer.is_valid(
         serializer.save()
-        return Response(status=status.HTTP_201_CREATED)
+        return Response(status=978)
 
 
 class SlotsViewSet(DestroyModelMixin, GenericViewSet):
