@@ -36,4 +36,4 @@ class UserProfileSerializer(ModelSerializer):
         data = {}
         if social:
             data = social.extra_data
-        return data
+        
