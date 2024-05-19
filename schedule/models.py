@@ -10,12 +10,15 @@ class Schedule(models.Model):
 
 
 class Slots(models.Model):
-
+    MEETING_TYPES = (
+        ('gmeet', 'gmeet'),
+        ('zoom', 'zoom'),
+    )
     from_time = models.TimeField()
     to_time = models.TimeField()
     max_people = models.IntegerField()
     description = models.TextField(null=True, blank=True)
-    meeting_type = models.CharField(max_length=10, choices=MEETING_TYPES, )
+    meeting_type = models.CharField(max_length=10, choices=MEETING_TYPES)
     is_available = models.BooleanField(default=True)
 
     # relationships
